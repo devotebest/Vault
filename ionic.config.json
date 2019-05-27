@@ -1,0 +1,7 @@
+{
+  "name": "airgap-vault-4",
+  "integrations": {
+    "cordova": {}
+  },
+  "type": "angular"
+}
