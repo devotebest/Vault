@@ -1,17 +1,20 @@
 import { Component, ViewChild, NgZone } from '@angular/core'
-import { Platform, Nav } from 'ionic-angular'
-import { StatusBar } from '@ionic-native/status-bar'
-import { SplashScreen } from '@ionic-native/splash-screen'
-import { TabsPage } from '../pages/tabs/tabs'
-import { Deeplinks } from '@ionic-native/deeplinks'
-import { StartupChecksProvider } from '../providers/startup-checks/startup-checks.provider'
-import { SchemeRoutingProvider } from '../providers/scheme-routing/scheme-routing'
+
+import { Platform } from '@ionic/angular'
+import { SplashScreen } from '@ionic-native/splash-screen/ngx'
+import { StatusBar } from '@ionic-native/status-bar/ngx'
+
 import { TranslateService } from '@ngx-translate/core'
-import { ProtocolsProvider } from '../providers/protocols/protocols'
-import { SecretsProvider } from '../providers/secrets/secrets.provider'
-import { handleErrorLocal, ErrorCategory } from '../providers/error-handler/error-handler'
-import { WalletSelectCoinsPage } from '../pages/wallet-select-coins/wallet-select-coins'
-import { SecretCreatePage } from '../pages/secret-create/secret-create'
+//import { TabsPage } from '../pages/tabs/tabs'
+import { Deeplinks } from '@ionic-native/deeplinks/ngx'
+import { StartupChecksProvider } from './providers/startup-checks/startup-checks.provider'
+import { SchemeRoutingProvider } from './providers/scheme-routing/scheme-routing'
+
+import { ProtocolsProvider } from './providers/protocols/protocols'
+import { SecretsProvider } from './providers/secrets/secrets.provider'
+import { handleErrorLocal, ErrorCategory } from './providers/error-handler/error-handler'
+//import { WalletSelectCoinsPage } from '../pages/wallet-select-coins/wallet-select-coins'
+//import { SecretCreatePage } from '../pages/secret-create/secret-create'
 
 const DEEPLINK_VAULT_PREFIX = `airgap-vault://`
 const DEEPLINK_VAULT_ADD_ACCOUNT = `${DEEPLINK_VAULT_PREFIX}add-account/`
@@ -35,13 +38,10 @@ function exposedPromise<T>(): ExposedPromise<T> {
 }
 
 @Component({
-  templateUrl: 'app.html'
+  selector: 'app-root',
+  templateUrl: 'app.component.html'
 })
-export class MyApp {
-  @ViewChild(Nav) nav: Nav
-
-  rootPage: any = null
-
+export class AppComponent {
   // Sometimes the deeplink was registered before the root page was set
   // This resulted in the root page "overwriting" the deep-linked page
   isInitialized: ExposedPromise<void> = exposedPromise<void>()
@@ -105,7 +105,7 @@ export class MyApp {
     this.startupChecks
       .initChecks()
       .then(async () => {
-        await this.nav.setRoot(TabsPage)
+        //await this.nav.setRoot(TabsPage);
         this.isInitialized.resolve()
       })
       .catch(async check => {
@@ -134,21 +134,21 @@ export class MyApp {
                   if (match.$link.url === DEEPLINK_VAULT_PREFIX || match.$link.url.startsWith(DEEPLINK_VAULT_ADD_ACCOUNT)) {
                     if (this.secretsProvider.currentSecretsList.getValue().length > 0) {
                       this.ngZone.run(async () => {
-                        await this.nav.popToRoot()
+                        //await this.nav.popToRoot()
                         const protocol = match.$link.url.substr(DEEPLINK_VAULT_ADD_ACCOUNT.length)
                         if (protocol.length > 0) {
-                          this.nav
-                            .push(WalletSelectCoinsPage, {
-                              protocol: protocol
-                            })
-                            .catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
+                          // this.nav
+                          //   .push(WalletSelectCoinsPage, {
+                          //     protocol: protocol
+                          //   })
+                          //   .catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
                         } else {
-                          this.nav.push(WalletSelectCoinsPage).catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
+                          //this.nav.push(WalletSelectCoinsPage).catch(handleErrorLocal(ErrorCategory.IONIC_NAVIGATION))
                         }
                       })
                     }
                   } else {
-                    this.schemeRoutingProvider.handleNewSyncRequest(this.nav, match.$link.url).catch(console.error)
+                    //this.schemeRoutingProvider.handleNewSyncRequest(this.nav, match.$link.url).catch(console.error)
                   }
                 })
                 .catch(console.error)
